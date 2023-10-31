@@ -1,0 +1,26 @@
+# To install ruby via rvm, it seems like openssl3 needs to be uninstalled.
+# If it is installed it tries to use that version, but it fails to do so.
+# This script first uninstalls it then reinstalls it after the rvm command.
+# reference: https://github.com/rvm/rvm/issues/5287
+
+# to use: rvm.install.readme 3.2.2
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    echo "usage: $0 3.2.2"
+    exit 0
+fi
+
+
+brew uninstall --ignore-dependencies openssl@3
+
+set +e
+rvm install $1
+rvm_install_exit_code=$?
+set -e
+
+brew install openssl@3
+
+if [ $rvm_install_exit_code -ne 0 ]; then
+  TEXT_COLOR_RED='\033[0;31m'
+  echo "\n${TEXT_COLOR_RED}ERROR: rvm install failed!" 1>&2
+  exit $rvm_install_exit_code
+fi
