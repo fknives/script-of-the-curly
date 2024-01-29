@@ -16,7 +16,9 @@ def rename_files(directory):
         new_filename = new_filename.replace('\u00FA','u')
         new_filename = new_filename.replace('\u00FC','u')
         new_filename = new_filename.replace('\u0171','u')
+        # file specific cases (here example remove some prefix)
         new_filename = re.sub(r'^[0-9_.()\s]+','',new_filename)
+        
         old_path = os.path.join(directory, filename)
         new_path = os.path.join(directory, new_filename)
         os.rename(old_path, new_path)
